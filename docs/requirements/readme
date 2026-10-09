@@ -1,0 +1,20 @@
+# Architecture
+
+This directory documents the technical architecture of Human4Human.
+
+## Scope
+
+Documentation may cover:
+
+* System context and component diagrams.
+* Application structure and module responsibilities.
+* Data models and data flows.
+* APIs and integrations.
+* Infrastructure, deployment, and security boundaries.
+* Architectural constraints and technical trade-offs.
+
+## Guidelines
+
+* Explain both the design and the reasoning behind it.
+* Keep diagrams and technical descriptions synchronized with the implementation.
+* Link significant architectural changes to their corresponding decisions in `../decisions/`.
