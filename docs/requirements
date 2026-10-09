@@ -1,0 +1,20 @@
+# Requirements
+
+This directory contains the requirements that guide the development of Human4Human.
+
+## Scope
+
+Requirements may include:
+
+* Functional requirements and user stories.
+* Non-functional requirements, including security, privacy, accessibility, and performance.
+* Acceptance criteria and validation rules.
+* Constraints, assumptions, and dependencies.
+
+## Guidelines
+
+* Give each requirement a clear identifier when appropriate.
+* Describe the expected outcome and its rationale.
+* Include acceptance criteria whenever possible.
+* Link requirements to relevant tests and implementation work.
+* Update requirements when product scope or priorities change.
