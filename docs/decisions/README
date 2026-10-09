@@ -1,0 +1,26 @@
+# Decision Records
+
+This directory contains Architecture Decision Records (ADRs) and other significant decisions made during the development of Human4Human.
+
+## Purpose
+
+Decision records preserve the context, alternatives, rationale, and consequences of important choices.
+
+## Suggested Format
+
+Each decision record should include:
+
+* Title and date.
+* Status: Proposed, Accepted, Deprecated, or Superseded.
+* Context and problem statement.
+* Options considered.
+* Decision and rationale.
+* Consequences and follow-up actions.
+
+## Naming Convention
+
+Use numbered files with descriptive names, for example:
+
+`0001-initial-technology-stack.md`
+
+Prefer creating a new decision record over silently rewriting the history of an accepted decision.
