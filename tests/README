@@ -1,0 +1,23 @@
+# Tests
+
+This directory contains automated tests for Human4Human.
+
+## Scope
+
+Depending on the project architecture, tests may include:
+
+* Unit tests.
+* Integration tests.
+* End-to-end tests.
+* Regression tests.
+* Security and performance tests where appropriate.
+
+## Guidelines
+
+* Write tests for new functionality and bug fixes.
+* Keep tests deterministic and independent whenever possible.
+* Use descriptive test names that explain the expected behavior.
+* Document any required test data, configuration, or setup.
+* Ensure the relevant test suite passes before merging changes.
+
+Testing tools and commands will be documented once the project's technology stack is established.
