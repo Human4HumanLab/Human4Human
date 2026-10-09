@@ -1,0 +1,14 @@
+# Source Code
+
+This directory contains the source code of Human4Human.
+
+## Guidelines
+
+* Organize code into modules with clear responsibilities.
+* Keep business logic separate from infrastructure concerns where practical.
+* Follow the project's agreed coding conventions.
+* Add or update tests when changing behavior.
+* Document non-obvious implementation choices.
+* Avoid committing secrets, credentials, or environment-specific configuration.
+
+The internal structure will evolve as the application architecture and technology stack are defined.
