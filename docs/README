@@ -1,0 +1,17 @@
+# Documentation
+
+This directory contains the documentation that defines the vision, requirements, architecture, and key design decisions of Human4Human.
+
+## Structure
+
+* `vision.md` — Project vision, goals, and guiding principles.
+* `requirements/` — Functional and non-functional requirements.
+* `architecture/` — System architecture, components, and technical design.
+* `decisions/` — Architecture Decision Records (ADRs) and significant project decisions.
+
+## Guidelines
+
+* Keep documentation clear, concise, and up to date.
+* Document significant changes alongside the implementation.
+* Record important decisions and their rationale.
+* Prefer linking to existing documentation over duplicating content.
