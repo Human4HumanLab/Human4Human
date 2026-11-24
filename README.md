@@ -1,4 +1,4 @@
-# Human 4 Human — workflow del professore con OpenRouter
+# Human 4 Human — workflow con OpenRouter
 
 Questa cartella riproduce il flusso descritto nel PDF del corso:
 - `piano.yml`: issue `fase:piano`, solo commento con il piano;
