@@ -1,0 +1,39 @@
+name: Agente pianificatore
+on:
+  issues:
+    types: [labeled]
+concurrency:
+  group: agente-${{ github.event.issue.number }}
+jobs:
+  piano:
+    if: github.event.label.name == 'fase:piano'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      issues: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Leggi modello del ruolo
+        id: model
+        run: echo "value=$(jq -r '.planner' .claude/models.json)" >> "$GITHUB_OUTPUT"
+      - uses: anthropics/claude-code-action@v1
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ANTHROPIC_BASE_URL: https://openrouter.ai/api
+          ANTHROPIC_AUTH_TOKEN: ${{ secrets.OPENROUTER_API_KEY }}
+        with:
+          anthropic_api_key: ${{ secrets.OPENROUTER_API_KEY }}
+          prompt: |
+            Leggi AGENTS.md e l'issue
+            #${{ github.event.issue.number }} con gh issue view.
+            Leggi solo i file elencati nella sezione Specifica.
+            Proponi un piano: file da creare o modificare, metodi,
+            test frame da coprire. Pubblicalo come commento
+            nell'issue. Non modificare nessun file.
+          claude_args: >-
+            --model ${{ steps.model.outputs.value }}
+            --max-turns 15
+            --allowedTools Read Glob Grep
+            "Bash(gh issue view:*)" "Bash(gh issue comment:*)"

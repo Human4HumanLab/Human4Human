@@ -1,0 +1,35 @@
+name: Agente revisore
+on:
+  pull_request:
+    types: [ready_for_review]
+jobs:
+  revisione:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      pull-requests: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Leggi modello del ruolo
+        id: model
+        run: echo "value=$(jq -r '.reviewer' .claude/models.json)" >> "$GITHUB_OUTPUT"
+      - uses: anthropics/claude-code-action@v1
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ANTHROPIC_BASE_URL: https://openrouter.ai/api
+          ANTHROPIC_AUTH_TOKEN: ${{ secrets.OPENROUTER_API_KEY }}
+        with:
+          anthropic_api_key: ${{ secrets.OPENROUTER_API_KEY }}
+          prompt: |
+            Segui le istruzioni di .claude/agents/revisore.md.
+            Confronta la diff della PR
+            #${{ github.event.pull_request.number }} con docs/modelli/
+            e con il caso d'uso indicato nella PR. Pubblica un
+            commento con l'elenco delle differenze.
+          claude_args: >-
+            --model ${{ steps.model.outputs.value }}
+            --max-turns 20
+            --allowedTools Read Glob Grep "Bash(gh pr diff:*)"
+            "Bash(gh pr view:*)" "Bash(gh pr comment:*)"

@@ -1,0 +1,44 @@
+name: Agente tester
+on:
+  pull_request:
+    types: [labeled]
+jobs:
+  test:
+    if: github.event.label.name == 'fase:test'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write
+      pull-requests: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: "17", cache: maven }
+      - name: Leggi modello del ruolo
+        id: model
+        run: echo "value=$(jq -r '.tester' .claude/models.json)" >> "$GITHUB_OUTPUT"
+      - uses: anthropics/claude-code-action@v1
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ANTHROPIC_BASE_URL: https://openrouter.ai/api
+          ANTHROPIC_AUTH_TOKEN: ${{ secrets.OPENROUTER_API_KEY }}
+        with:
+          anthropic_api_key: ${{ secrets.OPENROUTER_API_KEY }}
+          prompt: |
+            Segui le istruzioni di .claude/agents/tester.md.
+            Caso d'uso e test frame sono nell'issue collegata
+            alla PR #${{ github.event.pull_request.number }}.
+            Scrivi un test per frame in src/test/, esegui
+            mvn -q verify, fai commit e push. Se un test fallisce
+            non toccare il codice: elenca i frame falliti in un
+            commento alla PR.
+          claude_args: >-
+            --model ${{ steps.model.outputs.value }}
+            --max-turns 30
+            --allowedTools Read Write Glob Grep "Bash(mvn:*)"
+            "Bash(git add:*)" "Bash(git commit:*)" "Bash(git push:*)"
+            "Bash(gh pr view:*)" "Bash(gh pr comment:*)"
+            "Bash(gh issue view:*)"
