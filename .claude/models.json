@@ -1,0 +1,8 @@
+{
+  "_comment": "Inserire gli ID modello OpenRouter esatti. Preferire provider Anthropic first-party per compatibilità Claude Code.",
+  "planner": "INSERIRE_MODELLO_PLANNER",
+  "implementer": "INSERIRE_MODELLO_IMPLEMENTER",
+  "tester": "INSERIRE_MODELLO_TESTER",
+  "reviewer": "INSERIRE_MODELLO_REVIEWER",
+  "general": "INSERIRE_MODELLO_GENERAL"
+}
