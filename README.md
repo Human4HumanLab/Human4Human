@@ -1,122 +1,66 @@
-# Human4Human
+# Human 4 Human — workflow del professore con OpenRouter
 
-**A more human approach to social networking.**
+Questa cartella riproduce il flusso descritto nel PDF del corso:
+- `piano.yml`: issue `fase:piano`, solo commento con il piano;
+- `implementa.yml`: issue `fase:implementazione`, implementazione e PR draft;
+- `test.yml`: PR `fase:test`, solo test e commit/push sul branch;
+- `revisione.yml`: PR `ready_for_review`, revisione read-only e commento;
+- `agente.yml`: commenti `@claude` da OWNER/MEMBER/COLLABORATOR;
+- `ci.yml`: build/test Maven, senza agente e senza secret.
 
-Human4Human è una proposta progettuale per la realizzazione di un social network etico, orientato alla qualità delle relazioni, all'autonomia degli utenti e alla trasparenza delle interazioni digitali.
+## Unica separazione funzionale aggiunta: scelta dei modelli
 
-Il progetto nasce nell'ambito della **PMI Social Challenge Interateneo** ed è sviluppato da un team di studenti di Ingegneria del Software, con un approccio interdisciplinare che integra progettazione software, analisi dei requisiti e riflessione sulle dinamiche sociali.
+I modelli sono centralizzati in `.claude/models.json`. Ogni workflow legge la chiave del proprio ruolo e passa il valore a Claude Code con `--model`. Modificare quel JSON cambia il modello senza modificare il workflow.
 
-> Our goal is not to maximize the time people spend online, but to improve the value of the time they choose to spend together.
+Chiavi: `planner`, `implementer`, `tester`, `reviewer`, `general`.
 
-## 🎯 Vision & Objectives
+Sostituire i valori segnaposto con gli ID modello esatti pubblicati su OpenRouter. Per Claude Code, OpenRouter dichiara compatibilità garantita con provider Anthropic first-party; selezionarlo come provider prioritario. Vedi https://openrouter.ai/docs/guides/coding-agents/claude-code-integration.
 
-Le piattaforme social tradizionali possono fare ampio ricorso a sistemi di raccomandazione, metriche di engagement e meccanismi progettati per incentivare interazioni frequenti. Human4Human esplora un approccio alternativo, nel quale le scelte di progettazione sono guidate da principi di trasparenza, autonomia e centralità delle persone.
+## OpenRouter
 
-Gli obiettivi del progetto sono:
+Creare il secret GitHub `OPENROUTER_API_KEY`. Nei job Claude:
+- `anthropic_api_key` riceve il secret per superare il controllo di avvio dell'action;
+- `ANTHROPIC_BASE_URL` punta a `https://openrouter.ai/api`;
+- `ANTHROPIC_AUTH_TOKEN` usa la stessa chiave come Bearer token.
 
-* **Human-centered design:** mettere i bisogni delle persone al centro del processo di progettazione.
-* **Digital well-being:** evitare meccanismi di interazione deliberatamente orientati a incentivare un utilizzo compulsivo.
-* **Transparency:** rendere comprensibili le regole che governano contenuti, interazioni e funzionalità.
-* **Authentic interactions:** esplorare strumenti che favoriscano relazioni consapevoli e maggiore trasparenza sull'automazione.
-* **Privacy by design:** considerare la protezione dei dati personali fin dalle prime fasi di progettazione.
-* **Responsible AI:** valutare l'impiego dell'intelligenza artificiale come strumento di supporto, mantenendo il controllo nelle mani dell'utente.
+La CI non usa chiavi né agenti.
 
-Questi principi costituiscono gli obiettivi progettuali da tradurre in requisiti verificabili e sottoporre a valutazione.
+## Configurazione iniziale GitHub
 
-## 🧭 Design Principles
+Creare le label:
+```bash
+gh label create task-agente --color 0E8A16 --description "Task svolto con agenti"
+gh label create fase:piano --color FBCA04 --description "Avvia l'agente pianificatore"
+gh label create fase:implementazione --color 1D76DB --description "Piano approvato: avvia l'implementazione"
+gh label create fase:test --color 5319E7 --description "Avvia l'agente tester sulla PR"
+```
 
-Il progetto intende esplorare alcune scelte di design coerenti con la propria visione:
+Impostare il secret:
+```bash
+gh secret set OPENROUTER_API_KEY
+```
 
-* Feed cronologico e criteri di visualizzazione trasparenti.
-* Assenza di meccanismi deliberatamente progettati per incentivare la permanenza compulsiva.
-* Maggiore controllo dell'utente sulle notifiche e sulle proprie interazioni.
-* Trasparenza rispetto agli account automatizzati e ai contenuti generati dall'AI.
-* Funzionalità orientate alla qualità delle conversazioni e alla vita delle comunità.
-* Utilizzo responsabile dei dati e delle tecnologie intelligenti.
+In Settings > Actions > General:
+- Workflow permissions: Read repository contents and packages;
+- abilitare Allow GitHub Actions to create and approve pull requests.
 
-Le funzionalità definitive saranno individuate attraverso l'analisi dei bisogni degli utenti, la valutazione della fattibilità tecnica e la prioritizzazione dei requisiti.
+## Stack H4H e Java
 
-## 🛠️ Project Status
+`AGENTS.md` registra lo stack dichiarato per H4H (Java, Spring Boot, Thymeleaf, Spring Data JPA, Maven). I workflow mantengono Java 17 come nel materiale del professore; se la versione approvata nel `pom.xml` sarà diversa, allineare `setup-java` e CI in un'unica modifica esplicita.
 
-**Current phase:** Business Analysis & Requirements Engineering
+## Differenze tecniche indispensabili rispetto al PDF
 
-Il progetto è attualmente nella fase di analisi e definizione dei requisiti. L'architettura applicativa, lo stack tecnologico e le funzionalità della prima release saranno definiti durante il processo di progettazione.
+1. Il secret si chiama `OPENROUTER_API_KEY` al posto di `ANTHROPIC_API_KEY`.
+2. I job Claude impostano l'endpoint OpenRouter e il token Bearer come richiesto dalla guida OpenRouter per GitHub Action.
+3. Ogni workflow Claude ha un piccolo step `jq` che legge il modello dal file `.claude/models.json`; trigger, prompt, permessi, timeout, limiti, strumenti e azioni restano quelli del tutorial.
+4. Non è stata aggiunta integrazione YouTrack.
 
-Le attività in corso comprendono:
+Il PDF usa l'app GitHub Claude per l'identità `claude[bot]`; la chiave OpenRouter sostituisce solo la credenziale di accesso al modello e non installa automaticamente la GitHub App. Seguire il passo di installazione della GitHub App se si vuole mantenere quell'identità e il relativo flusso di autenticazione. Non confondere la chiave API con il token GitHub `github.token`.
 
-* Analisi degli stakeholder e dei bisogni degli utenti.
-* Ricerca e analisi dei requisiti.
-* Valutazione delle funzionalità candidate.
-* Definizione dell'architettura software.
-* Pianificazione delle attività di sviluppo e testing.
+## Da completare prima dell'attivazione
 
-## 🧪 Research & Interdisciplinary Approach
-
-Human4Human intende integrare prospettive provenienti dalle scienze sociali per approfondire il rapporto tra tecnologia, comportamento degli utenti e dinamiche delle comunità digitali.
-
-Tra i temi di interesse:
-
-* Social Network Analysis e struttura delle comunità.
-* Qualità delle relazioni e partecipazione online.
-* Autonomia digitale e design non manipolativo.
-* Fiducia, autenticità e presenza di account automatizzati.
-* Impatto della mediazione algoritmica e dell'intelligenza artificiale sulle interazioni.
-
-L'obiettivo è collegare l'analisi sociale alla definizione dei requisiti software e alla valutazione del prototipo.
-
-## 🏗️ Project Management
-
-Il team adotta un approccio Agile adattato alle dimensioni e agli obiettivi del progetto.
-
-Gli strumenti di lavoro sono:
-
-* **Trello:** pianificazione, assegnazione delle task e monitoraggio delle sprint.
-* **Discord:** comunicazione e coordinamento del team.
-* **GitHub:** versionamento del codice, gestione delle modifiche, documentazione tecnica e collaborazione allo sviluppo.
-
-Le attività saranno progressivamente trasformate in requisiti, issue e task verificabili.
-
-## 🤝 Contributing
-
-La collaborazione si basa su responsabilità condivise, comunicazione trasparente e rispetto delle convenzioni concordate.
-
-Prima di contribuire:
-
-1. Consulta la documentazione disponibile.
-2. Verifica su Trello o GitHub le attività assegnate e le priorità.
-3. Discuti con il team eventuali modifiche rilevanti o nuove proposte.
-4. Segui le convenzioni di sviluppo e documentazione che verranno definite.
-5. Sottoponi le modifiche a revisione prima dell'integrazione nel ramo principale.
-
-Le modalità definitive di sviluppo, branching e code review saranno documentate prima dell'avvio dello sviluppo collaborativo.
-
-## 📚 Documentation
-
-La documentazione del progetto sarà organizzata progressivamente:
-
-* `docs/vision.md` — visione, obiettivi e principi progettuali.
-* `docs/requirements/` — requisiti funzionali e non funzionali.
-* `docs/architecture/` — architettura e decisioni tecniche.
-* `docs/decisions/` — registro delle decisioni architetturali e progettuali.
-
-## 🔒 Privacy & Ethics
-
-La tutela della privacy, la trasparenza e il controllo dell'utente costituiscono principi guida del progetto.
-
-Le scelte relative al trattamento dei dati, alla sicurezza, alla moderazione e all'utilizzo dell'AI saranno analizzate e documentate durante la progettazione.
-
-## 📌 Project Information
-
-* **Project:** Human4Human
-* **Context:** PMI Social Challenge Interateneo
-* **Discipline:** Software Engineering
-* **Development approach:** Agile
-* **Current phase:** Business Analysis & Requirements Engineering
-
-## 📄 License
-
-La licenza del progetto sarà definita dal team e documentata in questo repository.
-
----
-
-*Human4Human — Technology should serve people, not the other way around.*
+- Sostituire gli username di esempio in `CODEOWNERS`.
+- Inserire gli ID modello reali in `.claude/models.json`.
+- Allineare Java 17 alla versione effettiva del progetto.
+- Popolare RAD, SDD, modelli e test frame H4H.
+- Configurare ruleset `main` con required approval e status check `build`.
