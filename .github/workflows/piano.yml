@@ -36,3 +36,5 @@ jobs:
           claude_args: >-
             --model ${{ steps.model.outputs.value }}
             --max-turns 20
+            --allowedTools Read Glob Grep 
+            "Bash(gh issue view:*)" "Bash(gh issue comment:*)"
