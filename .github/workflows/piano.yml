@@ -29,6 +29,7 @@ jobs:
           ANTHROPIC_AUTH_TOKEN: ${{ secrets.OPENROUTER_API_KEY }}
         with:
           anthropic_api_key: ${{ secrets.OPENROUTER_API_KEY }}
+          show_full_output: true
           prompt: |
             Agisci come Planner. Leggi AGENTS.md e l'issue corrente.
             Analizza obiettivo, criteri di accettazione, requisiti e dipendenze.
@@ -39,3 +40,4 @@ jobs:
             --max-turns 20
             --allowedTools Read Glob Grep 
             "Bash(gh issue view:*)" "Bash(gh issue comment:*)"
+            
