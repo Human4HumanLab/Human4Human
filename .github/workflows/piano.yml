@@ -24,6 +24,7 @@ jobs:
       - name: Esegui planner tramite OpenRouter
         uses: anthropics/claude-code-action@v1
         env:
+          GH_TOKEN: ${{ github.token }}
           ANTHROPIC_BASE_URL: https://openrouter.ai/api
           ANTHROPIC_AUTH_TOKEN: ${{ secrets.OPENROUTER_API_KEY }}
         with:
