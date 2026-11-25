@@ -1,0 +1,5 @@
+# Sostituire gli username/team di esempio con i responsabili H4H.
+* @OWNER_GITHUB
+/AGENTS.md @OWNER_GITHUB
+/.claude/ @OWNER_GITHUB
+/.github/ @OWNER_GITHUB

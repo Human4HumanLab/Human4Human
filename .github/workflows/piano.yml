@@ -1,0 +1,37 @@
+name: Agente planner
+
+on:
+  issues:
+    types: [labeled]
+
+jobs:
+  piano:
+    if: github.event.label.name == 'fase:piano'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      issues: write
+      pull-requests: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Leggi modello del ruolo
+        id: model
+        run: echo "value=$(jq -r '.planner' .claude/models.json)" >> "$GITHUB_OUTPUT"
+
+      - name: Esegui planner tramite OpenRouter
+        uses: anthropics/claude-code-action@v1
+        env:
+          ANTHROPIC_BASE_URL: https://openrouter.ai/api
+          ANTHROPIC_AUTH_TOKEN: ${{ secrets.OPENROUTER_API_KEY }}
+        with:
+          anthropic_api_key: ${{ secrets.OPENROUTER_API_KEY }}
+          prompt: |
+            Agisci come Planner. Leggi AGENTS.md e l'issue corrente.
+            Analizza obiettivo, criteri di accettazione, requisiti e dipendenze.
+            Pubblica nell'issue un piano ordinato, con attività, rischi,
+            dipendenze e verifiche. Non modificare file e non implementare codice.
+          claude_args: >-
+            --model ${{ steps.model.outputs.value }}
+            --max-turns 20

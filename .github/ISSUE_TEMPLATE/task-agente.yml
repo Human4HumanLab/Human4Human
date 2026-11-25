@@ -1,0 +1,27 @@
+# .github/ISSUE_TEMPLATE/task-agente.yml 
+name: Task per agente 
+description: Implementazione di un caso d'uso con un agente 
+title: "UC_XX: " 
+labels: ["task-agente"] 
+body: 
+  - type: input 
+    id: uc 
+    attributes: 
+      label: Caso d'uso 
+      placeholder: UC_03 PrenotaPosto 
+    validations: 
+      required: true 
+  - type: textarea 
+    id: specifica 
+    attributes: 
+      label: Specifica (file da leggere) 
+    validations: 
+      required: true 
+  - type: textarea 
+    id: ambito 
+    attributes: 
+      label: Ambito (classi e metodi da toccare) 
+  - type: textarea 
+    id: verifica 
+    attributes: 
+      label: Test frame da coprire

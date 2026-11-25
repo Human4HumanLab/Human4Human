@@ -1,0 +1,9 @@
+
+{
+  "_comment": "Modelli proposti nel foglio H4H Model Selection Evaluation; provider Anthropic first-party su OpenRouter.",
+  "planner": "anthropic/claude-sonnet-5.5",
+  "implementer": "anthropic/claude-haiku-5.5",
+  "tester": "anthropic/claude-sonnet-5.5",
+  "reviewer": "anthropic/claude-opus-5.5",
+  "general": "anthropic/claude-sonnet-4.6"
+}
