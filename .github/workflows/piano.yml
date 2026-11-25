@@ -30,8 +30,8 @@ jobs:
         with:
           anthropic_api_key: ${{ secrets.OPENROUTER_API_KEY }}
           show_full_output: true
-          prompt: |
-            Agisci come Planner. Leggi AGENTS.md e l'issue corrente.
+         prompt: |
+            Agisci come Planner. Leggi AGENTS.md e l'issue #${{ github.event.issue.number }}.
             Analizza obiettivo, criteri di accettazione, requisiti e dipendenze.
             Pubblica nell'issue un piano ordinato, con attività, rischi,
             dipendenze e verifiche. Non modificare file e non implementare codice.
